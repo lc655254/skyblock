@@ -9,14 +9,14 @@ class Challenges {
 
         this.pl_data = this.player_file.init("data", {})
 
-        this.levels = this.data_file.init("levels", ["新手", "基础", "简单", "普通", "困难"]);
+        this.levels = this.data_file.init("levels", ["入门", "初阶", "进阶", "高阶", "大师"]);
 
         this.levelsLocked = this.data_file.init("levelsLocked", {
-            "新手": "新手=0",
-            "基础": "新手=5",
-            "简单": "基础=6",
-            "普通": "简单=6",
-            "困难": "普通=6"
+            "入门": "入门=0",
+            "初阶": "入门=12",
+            "进阶": "进阶=6",
+            "高阶": "初阶=6",
+            "大师": "高阶=6"
         });
 
         this.challengeList = this.data_file.init("challengeList", {});
@@ -469,6 +469,7 @@ class Challenges {
     challengeForm(player, level,) {
 
         if (!this.checkChallengeLevelsReq(player, level)) return player.sendMsg(`§c你需要完成§e${this.levelsLocked[level].split("=")[1]}§r个§c${this.levelsLocked[level].split("=")[0]}§r等级的任务`);
+
 
         let keys = this.challengeMap.get(level);
 
