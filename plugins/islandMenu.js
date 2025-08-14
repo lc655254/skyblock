@@ -129,6 +129,16 @@ class IslandMenu {
 
         fm.addButton("查询岛屿等级");
 
+        fm.addButton("查询岛屿等级排行榜");
+
+        fm.addButton("添加岛屿信任名单");
+
+        fm.addButton("设置岛屿信任名单");
+
+        fm.addButton("列出岛屿信任名单");
+
+        fm.addButton("设置岛屿欢迎词");
+
         fm.addButton("删除岛屿");
 
         fm.addButton("§l返回上一级");
@@ -145,9 +155,24 @@ class IslandMenu {
                     player.runcmd("is level get")
                     break;
                 case 2:
-                    player.runcmd("is delete")
+                    player.runcmd("is level top")
                     break;
                 case 3:
+                    player.runcmd("is perms add")
+                    break;
+                case 4:
+                    player.runcmd("is perms set")
+                    break;
+                case 5:
+                    player.runcmd("is perms list")
+                    break;
+                case 6:
+                    player.runcmd("is tip")
+                    break;
+                case 7:
+                    player.runcmd("is delete")
+                    break;
+                case 8:
                     this.Form(player);
                     break;
                 default:
