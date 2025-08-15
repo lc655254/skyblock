@@ -1,5 +1,3 @@
-
-
 const admin_flie = new JsonConfigFile('.\\plugins\\skyblock\\plugins\\admin\\data.json', '{}');
 const admin_cache_flie = new JsonConfigFile('.\\plugins\\skyblock\\plugins\\admin\\data.json', '{}');
 
@@ -357,6 +355,8 @@ function deleteIslandSpawn(player, id) {
 
     const spawn = skyblock.Locator.data[id].spawn
 
+    const islandId = id;
+
     let warps = Object.keys(spawn)
 
     let fm = mc.newSimpleForm().setTitle("删除岛屿传送点")
@@ -375,7 +375,7 @@ function deleteIslandSpawn(player, id) {
 
             player.sendMsg("§a删除成功!");
 
-            skyblock.Locator.setIslandData(id, "spawn", spawn)
+            skyblock.Locator.setIslandData(islandId, "spawn", spawn)
 
         })
 

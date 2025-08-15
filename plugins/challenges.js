@@ -157,50 +157,44 @@ class Challenges {
 
     hasSpecifiedEntity(player, req, name) {
 
-        let enSet = new Set(...mc.getAllEntities())
-
-        let foundEntities = new Set();
+        const requirements = {};
+        for (const condition of req) {
+            const [type, countStr] = condition.split("=");
+            requirements[type] = parseInt(countStr, 10);
+        }
 
         const { x: playerX, y: playerY, z: playerZ } = player.pos;
+        const allEntities = mc.getAllEntities();
+        const counts = {};
 
-        for (const entity of enSet) {
+        // 统计附近实体数量
+        for (const entity of allEntities) {
+            const { x: entityX, y: entityY, z: entityZ } = entity.pos;
+            const dx = entityX - playerX;
+            const dy = entityY - playerY;
+            const dz = entityZ - playerZ;
+            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-            if (req.includes(entity.type)) {
-
-                const { x: entityX, y: entityY, z: entityZ } = entity.pos;
-
-                const distance = Math.sqrt(
-
-                    Math.pow(entityX - playerX, 2) +
-                    Math.pow(entityY - playerY, 2) +
-                    Math.pow(entityZ - playerZ, 2)
-
-                );
-
-                if (distance <= 10) {
-
-                    foundEntities.add(entity);
-
-                }
-
+            if (distance <= 10) {
+                counts[entity.type] = (counts[entity.type] || 0) + 1;
             }
-
         }
 
-        let result = foundEntities.size == req
+        // 检查是否满足需求
+        for (const type in requirements) {
+            if (!counts[type] || counts[type] < requirements[type]) {
 
-        if (result) {
+                player.sendMsg(`你身边没有足够的实体`)
 
-            mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`)
-
-        } else {
-
-            player.sendMsg(`你身边没有足够的实体`)
+                return false; // 不满足
+            }
         }
 
-        return result;
+        mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`);
 
+        return true; // 全部满足
     }
+
 
     hasEnoughLevel(player, req, name) {
 
@@ -469,7 +463,6 @@ class Challenges {
     challengeForm(player, level,) {
 
         if (!this.checkChallengeLevelsReq(player, level)) return player.sendMsg(`§c你需要完成§e${this.levelsLocked[level].split("=")[1]}§r个§c${this.levelsLocked[level].split("=")[0]}§r等级的任务`);
-
 
         let keys = this.challengeMap.get(level);
 
