@@ -185,13 +185,13 @@ class Challenges {
             if (!counts[type] || counts[type] < requirements[type]) {
 
                 player.sendMsg(`你身边没有足够的实体`)
-
+              
                 return false; // 不满足
             }
         }
 
         mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`);
-
+      
         return true; // 全部满足
     }
 
