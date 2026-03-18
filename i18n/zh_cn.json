@@ -25,9 +25,9 @@
     "form.invite.description": "§b玩家: {player} 向你发送了一个岛屿邀请 , 有效期30秒 .\n输入 /is invite accept 接受 \n输入 /is invite refuse 拒绝 \n§c接受邀请会删除当前岛屿 , 请慎重考虑!",
     "form.invite.not_receive": "§c你未收到邀请",
     "form.invite.accept_success": "§a你已接受对方的邀请",
-    "form.invite.refuse_success": "§c你已拒绝对方的邀请",
+    "form.invite.refuse_success": "§c你已拒绝对方的邀请或者不在游戏页面正常接受邀请，可以重新联系对方邀请尝试",
     "form.invite.accept": "§a对方接受了你的邀请",
-    "form.invite.refuse": "§c对方拒绝了你的邀请",
+    "form.invite.refuse": "§c对方拒绝了你的邀请或者不在游戏页面正常接受邀请，可以重新邀请尝试",
     "error.island.max_members": "§c岛屿成员已满",
     "form.invite.send_success": "§a已向对方发送邀请",
     "error.buleprint.no_addmode": "§c你还未进入添加模式",
@@ -81,5 +81,6 @@
     "events.onBlockExplode": "方块爆炸",
     "events.onRespawnAnchorExplode": "重生锚爆炸",
     "events.onFarmLandDecay": "耕地退化",
-    "island.help": "§a/is  打开空岛菜单\n/is create  创建空岛\n/is delete 删除空岛\n/is spawn 返回空岛\n/is set perms  设置岛屿权限\n/is is set spawn 设置岛屿出生点\n/is invite <player> 邀请加入岛屿  \n/is invite accept 接受邀请  \n/is invite refuse 拒绝邀请  \n/is kick <player> 踢出玩家\n"
+    "island.help": "§a/is  打开空岛菜单\n/is create  创建空岛\n/is delete 删除空岛\n/is spawn 返回空岛\n/is set perms  设置岛屿权限\n/is is set spawn 设置岛屿出生点\n/is invite <player> 邀请加入岛屿  \n/is invite accept 接受邀请  \n/is invite refuse 拒绝邀请  \n/is kick <player> 踢出玩家\n",
+    "form.invite.member_joined": "§a玩家 §e{player} §a加入了你的岛屿"
 }

@@ -103,9 +103,7 @@ class IslandMenu {
 }
 
 
-
 /*这里没必要写菜单触发
-
 function debounce(func, delay) {
     let timeoutId = null;
 
@@ -120,6 +118,7 @@ function debounce(func, delay) {
         }, delay);
     };
 }
+
 const debouncedonUseItem = debounce((player, item) => {
 
     if (item?.type == "minecraft:clock") player.runcmd("is")
@@ -139,11 +138,9 @@ mc.listen("onAttackBlock", (player, block, item) => {
     if (item?.type == "minecraft:clock") player.runcmd("is")
 
 })
-
-
-skyblock.Event.listen("onExecuteSkyCommandIs", (context) => IslandMenu.Form(context._ori.player))
 */
 
+skyblock.Event.listen("onExecuteSkyCommandIs", (context) => IslandMenu.Form(context._ori.player))
 
 // 进服给钟  依旧祖传代码
 

@@ -110,6 +110,12 @@ Object.defineProperty(LLSE_Player.prototype, 'inIsland', {
 
 })
 
+// 监听岛屿删除事件，清理全局状态
+skyblock.Event.listen("onDeleteIsland", (player, id, members) => {
+    // 清理成员和岛主的 inIsland 状态
+    members.forEach(xuid => Global.inIsland.delete(xuid));
+    Global.inIsland.delete(player.xuid);
+});
 
 // 全局数据
 class GlobalData {
