@@ -54,6 +54,7 @@ class Challenges {
         return total >= count;
     }
 
+    //物品
     hasEnoughItems(player, req, name) {
 
         let itemList = req.map(item => {
@@ -77,36 +78,30 @@ class Challenges {
         }
 
         let inv = player.getInventory();
-
-        let items = inv.getAllItems();
+        let slots = inv.getAllItems();  // 获取当前所有槽位的物品快照（含空槽位）
 
         for (let reqItem of itemList) {
-
             let reqCount = reqItem.count;
+            // 从后向前遍历槽位索引
+            for (let i = slots.length - 1; i >= 0 && reqCount > 0; i--) {
+                let slotItem = slots[i];
+                if (!slotItem || slotItem.type !== reqItem.type) continue;
 
-            for (let i = 0; i < items.length && reqCount > 0; i++) {
+                // 重新获取该槽位的实时物品（因为库存可能在之前步骤已变化）
+                let currentItem = inv.getItem(i);
+                if (!currentItem || currentItem.type !== reqItem.type) continue;
 
-                let item = items[i];
-
-                if (item.type === reqItem.type) {
-
-                    if (reqCount < item.count) {
-
-                        inv.removeItem(i, reqCount);
-
-                        reqCount = 0;
-
-                    } else {
-
-                        inv.removeItem(i, item.count);
-
-                        reqCount -= item.count;
-
-                    }
+                let haveCount = currentItem.count;
+                if (reqCount < haveCount) {
+                    inv.removeItem(i, reqCount);
+                    reqCount = 0;
+                } else {
+                    inv.removeItem(i, haveCount);
+                    reqCount -= haveCount;
+                    slots[i] = null;  // 标记此槽位已空，避免后续误用
                 }
             }
         }
-
         player.refreshItems();
 
         mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`)
@@ -114,18 +109,18 @@ class Challenges {
         return true;
     }
 
-
+    //方块
     hasSpecifiedBlock(player, req, name) {
 
         let allBlocks = new Set();
 
         let centerPoint = player.pos;
 
-        for (let x = centerPoint.x - 3; x <= centerPoint.x + 3; x++) {
+        for (let x = centerPoint.x - 15; x <= centerPoint.x + 15; x++) {
 
-            for (let y = centerPoint.y - 3; y <= centerPoint.y + 3; y++) {
+            for (let y = centerPoint.y - 15; y <= centerPoint.y + 15; y++) {
 
-                for (let z = centerPoint.z - 3; z <= centerPoint.z + 3; z++) {
+                for (let z = centerPoint.z - 15; z <= centerPoint.z + 15; z++) {
 
                     let blockType = mc.getBlock(x, y, z, 0).type
 
@@ -154,7 +149,7 @@ class Challenges {
 
         return result
     }
-
+    //实体
     hasSpecifiedEntity(player, req, name) {
 
         const requirements = {};
@@ -185,33 +180,17 @@ class Challenges {
             if (!counts[type] || counts[type] < requirements[type]) {
 
                 player.sendMsg(`你身边没有足够的实体`)
-              
+
                 return false; // 不满足
             }
         }
 
         mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`);
-      
+
         return true; // 全部满足
     }
 
 
-    hasEnoughLevel(player, req, name) {
-
-        let lv = skyblock.Locator.getPlayerLevel(player)?.level ?? 0;
-
-        if (lv < req) {
-
-            player.sendMsg(`你的等级不足 , 当前等级${lv}`)
-
-            return false
-
-        }
-
-        mc.broadcast(`§a玩家 §e${player.realName} §c完成了 §a${name}`)
-
-        return true
-    }
 
     splitNumber(number) {
 
@@ -239,13 +218,13 @@ class Challenges {
 
                     const [type, count] = reward.split("=");
 
-                    const list = this.splitNumber(parseInt(count));
-
-                    list.forEach(num => {
-
-                        player.giveItem(mc.newItem(type, num));
-
-                    });
+                    let remaining = parseInt(count);
+                    const maxStack = mc.newItem(type, 1)?.maxCount ?? 64; // 获取最大堆叠
+                    while (remaining > 0) {
+                        const take = Math.min(maxStack, remaining);
+                        player.giveItem(mc.newItem(type, take));
+                        remaining -= take;
+                    }
                 }
 
                 player.refreshItems();
@@ -297,7 +276,15 @@ class Challenges {
 
                     let item = mc.newItem(NBT.parseSNBT(this.nbtData[name]))
 
-                    player.giveItem(item, parseInt(amount));
+                    const maxStack = item?.maxCount ?? 64;
+                    let remaining = parseInt(amount);
+                    while (remaining > 0) {
+                        const take = Math.min(maxStack, remaining);
+                        let cloneItem = item.clone();
+                        cloneItem.count = take;
+                        player.giveItem(cloneItem);
+                        remaining -= take;
+                    }
                 }
 
                 player.refreshItems();
@@ -379,11 +366,6 @@ class Challenges {
             case "entity":
 
                 this.checkChallenges(player, challengesName, this.hasSpecifiedEntity)
-
-                break;
-            case "level":
-
-                this.checkChallenges(player, challengesName, this.hasEnoughLevel)
 
                 break;
 

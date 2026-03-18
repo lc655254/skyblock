@@ -8,7 +8,7 @@ class IslandMenu {
 
         fm.addButton("返回岛屿", "textures/ui/icon_recipe_nature");
 
-        fm.addButton("岛屿传送点", "textures/ui/sidebar_icons/realms");
+        fm.addButton("岛屿重生点", "textures/ui/sidebar_icons/realms");
 
         fm.addButton("岛屿挑战", "textures/ui/sidebar_icons/genre");
 
@@ -39,57 +39,9 @@ class IslandMenu {
 
     }
 
-
-    static islandWarp(player) {
-
-        let fm = mc.newSimpleForm().setTitle("空岛菜单")
-
-        fm.addButton("我的岛屿传送点");
-
-        fm.addButton("公开岛屿列表");
-
-        fm.addButton("创建传送点");
-
-        fm.addButton("传送点设置");
-
-        fm.addButton("§l返回上一级");
-
-        player.sendForm(fm, (player, id) => {
-
-            if (id == null) return false
-
-            switch (id) {
-                case 0:
-                    player.runcmd("is warp get")
-                    break;
-                case 1:
-                    player.runcmd("is warp list")
-                    break;
-                case 2:
-                    player.runcmd("is warp create")
-                    break;
-                case 3:
-                    this.islandWarpSet(player);
-                    break;
-                case 4:
-                    this.Form(player)
-                    break;
-                default:
-                    break;
-            }
-
-        })
-
-    }
-
-
     static islandWarpSet(player) {
 
         let fm = mc.newSimpleForm().setTitle("空岛菜单")
-
-        fm.addButton("是否公开传送点");
-
-        fm.addButton("删除传送点");
 
         fm.addButton("设置岛屿出生点");
 
@@ -101,15 +53,9 @@ class IslandMenu {
 
             switch (id) {
                 case 0:
-                    player.runcmd("is warp set")
-                    break;
-                case 1:
-                    player.runcmd("is warp delete")
-                    break;
-                case 2:
                     player.runcmd("is set spawn")
                     break;
-                case 3:
+                case 1:
                     this.islandWarp(player);
                     break;
                 default:
@@ -127,18 +73,6 @@ class IslandMenu {
 
         fm.addButton("设置岛屿权限");
 
-        fm.addButton("查询岛屿等级");
-
-        fm.addButton("查询岛屿等级排行榜");
-
-        fm.addButton("添加岛屿信任名单");
-
-        fm.addButton("设置岛屿信任名单");
-
-        fm.addButton("列出岛屿信任名单");
-
-        fm.addButton("设置岛屿欢迎词");
-
         fm.addButton("删除岛屿");
 
         fm.addButton("§l返回上一级");
@@ -152,27 +86,9 @@ class IslandMenu {
                     player.runcmd("is set perms")
                     break;
                 case 1:
-                    player.runcmd("is level get")
-                    break;
-                case 2:
-                    player.runcmd("is level top")
-                    break;
-                case 3:
-                    player.runcmd("is perms add")
-                    break;
-                case 4:
-                    player.runcmd("is perms set")
-                    break;
-                case 5:
-                    player.runcmd("is perms list")
-                    break;
-                case 6:
-                    player.runcmd("is tip")
-                    break;
-                case 7:
                     player.runcmd("is delete")
                     break;
-                case 8:
+                case 2:
                     this.Form(player);
                     break;
                 default:
@@ -188,6 +104,8 @@ class IslandMenu {
 
 
 
+/*这里没必要写菜单触发
+
 function debounce(func, delay) {
     let timeoutId = null;
 
@@ -202,7 +120,6 @@ function debounce(func, delay) {
         }, delay);
     };
 }
-
 const debouncedonUseItem = debounce((player, item) => {
 
     if (item?.type == "minecraft:clock") player.runcmd("is")
@@ -225,10 +142,10 @@ mc.listen("onAttackBlock", (player, block, item) => {
 
 
 skyblock.Event.listen("onExecuteSkyCommandIs", (context) => IslandMenu.Form(context._ori.player))
+*/
 
 
-
-// 进服给钟
+// 进服给钟  依旧祖传代码
 
 mc.listen("onJoin", (player) => {
 
@@ -236,10 +153,11 @@ mc.listen("onJoin", (player) => {
 
     if (!hasClock) {
 
-        const clock = mc.newItem(NBT.parseSNBT(`{"Count":1b,"Damage":0s,"Name":"minecraft:clock","WasPickedUp":0b,"tag":{"minecraft:item_lock":2b,"minecraft:keep_on_death":1b}}`));
+        const clock = mc.newItem(NBT.parseSNBT(`{"Count":1b,"Damage":0s,"Name":"minecraft:clock","WasPickedUp":0b,"tag":{"minecraft:item_lock":2b,"minecraft:keep_on_death":1b,"display":{"Name":"§l§e菜单"}}}`));
 
         player.giveItem(clock);
 
     }
+}
 
-})
+)
